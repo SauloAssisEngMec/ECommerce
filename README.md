@@ -34,3 +34,5 @@ The `cdk.json` file tells the CDK Toolkit how to execute your app.
 ![Alt text]("https://github.com/SauloAssisEngMec/ECommerce/blob/main/diagram/productsApp.png")
 
 products admin lambda ; products Fecth lambda; products db dinamoBD; products event Lambda
+
+![alt text](diagram/productsApp.png)
