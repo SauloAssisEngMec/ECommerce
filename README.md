@@ -15,7 +15,7 @@ The `cdk.json` file tells the CDK Toolkit how to execute your app.
 
 # ECommerce
 
-## this application conatins
+## this application contains
 
 1 - autorization and autentication
 
@@ -29,6 +29,8 @@ The `cdk.json` file tells the CDK Toolkit how to execute your app.
 
 ## 1 - product managemnt diagram
 
-### First stack contain ()
+### First stack contain ()https://github.com/SauloAssisEngMec/
+
+![Alt text]("https://github.com/SauloAssisEngMec/ECommerce/blob/main/diagram/productsApp.png?raw=true")
 
 products admin lambda ; products Fecth lambda; products db dinamoBD; products event Lambda
