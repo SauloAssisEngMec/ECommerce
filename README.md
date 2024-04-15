@@ -34,3 +34,17 @@ The `cdk.json` file tells the CDK Toolkit how to execute your app.
 ![alt text](diagram/productsApp.png)
 
 products admin lambda ; products Fecth lambda; products db dinamoBD; products event Lambda
+
+## 2 - api gateway stack (REST)
+
+APi gateway is mport to validate uri, http method, requisitionss body e.g.
+
+features for products, for instance ...
+
+| request            | URL            | http verb |
+| ------------------ | -------------- | --------- |
+| list all products  | /products      | GET       |
+| seacrh one product | /products/{id} | GET       |
+| creat one product  | /products      | POST      |
+| change one product | /products/{id} | PUT       |
+| delete one product | /products/{id} | DELETE    |
