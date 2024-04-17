@@ -11,9 +11,24 @@ export class ECommerceApiStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: ECommerceApiStackProps) {
     super(scope, id, props);
 
+    const logsGroup = new cwlogs.LogGroup(this, "ECommerceApiLogs");
     const api = new apigateway.RestApi(this, "ECommerceApi", {
       restApiName: "ECommerceApi",
       cloudWatchRole: true,
+      deployOptions: {
+        accessLogDestination: new apigateway.LogGroupLogDestination(logsGroup),
+        accessLogFormat: apigateway.AccessLogFormat.jsonWithStandardFields({
+          httpMethod: true,
+          ip: true,
+          protocol: true,
+          requestTime: true,
+          resourcePath: true,
+          responseLength: true,
+          status: true,
+          caller: true,
+          user: true,
+        }),
+      },
     });
 
     const productsFecthIntegration = new apigateway.LambdaIntegration(
@@ -21,5 +36,6 @@ export class ECommerceApiStack extends cdk.Stack {
     );
 
     const productsResource = api.root.addResource("products");
+    productsResource.addMethod("GET", productsFecthIntegration);
   }
 }
