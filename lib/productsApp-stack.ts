@@ -2,15 +2,30 @@ import * as lambda from "aws-cdk-lib/aws-lambda";
 import * as lambdaNodeJS from "aws-cdk-lib/aws-lambda-nodejs";
 
 import * as cdk from "aws-cdk-lib";
+import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
 
 import { Construct } from "constructs";
 
 export class ProductsAppStack extends cdk.Stack {
-  // atribute of class that represent products fetch func (read only)
+  // atribute of class
   readonly productsFetchHandler: lambdaNodeJS.NodejsFunction;
+  readonly productsAdminHandler: lambdaNodeJS.NodejsFunction;
+  readonly productsDDB: dynamodb.Table;
 
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
+
+    this.productsDDB = new dynamodb.Table(this, "ProductsDDB", {
+      tableName: "products",
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
+      partitionKey: {
+        name: "id",
+        type: dynamodb.AttributeType.STRING,
+      },
+      billingMode: dynamodb.BillingMode.PROVISIONED,
+      readCapacity: 1,
+      writeCapacity: 1,
+    });
 
     this.productsFetchHandler = new lambdaNodeJS.NodejsFunction(
       this,
@@ -21,9 +36,32 @@ export class ProductsAppStack extends cdk.Stack {
         functionName: "ProductsFecthFunction",
         entry: "lambda/products/productsFetchFunction.ts",
         handler: "handler",
-        timeout: cdk.Duration.seconds(5),
+        timeout: cdk.Duration.seconds(2),
         bundling: { minify: true, sourceMap: false },
+        environment: {
+          PRODUCTS_DDB: this.productsDDB.tableName,
+        },
       }
     );
+    this.productsDDB.grantReadData(this.productsFetchHandler);
+
+    this.productsAdminHandler = new lambdaNodeJS.NodejsFunction(
+      this,
+      "ProductsAdminFunction",
+      {
+        runtime: lambda.Runtime.NODEJS_20_X,
+        memorySize: 512,
+        functionName: "ProductsAdminFunction",
+        entry: "lambda/products/productsAdminFunction.ts",
+        handler: "handler",
+        timeout: cdk.Duration.seconds(2),
+        bundling: { minify: true, sourceMap: false },
+        environment: {
+          PRODUCTS_DDB: this.productsDDB.tableName,
+        },
+      }
+    );
+
+    this.productsDDB.grantWriteData(this.productsAdminHandler);
   }
 }
