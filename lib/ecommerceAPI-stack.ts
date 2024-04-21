@@ -32,6 +32,8 @@ export class ECommerceApiStack extends cdk.Stack {
       },
     });
 
+    // CONFIG FOR productsFecth
+
     // integrating api gateway with lambda fecth products function
 
     const productsFecthIntegration = new apigateway.LambdaIntegration(
@@ -46,5 +48,22 @@ export class ECommerceApiStack extends cdk.Stack {
     //  adding {id} for get by id, then teh result is /products/{id}
     const productIdResource = productsResource.addResource("{id}");
     productIdResource.addMethod("GET", productsFecthIntegration);
+
+    // CONFIG FOR productsAdmin
+
+    const productsAdminIntegration = new apigateway.LambdaIntegration(
+      props.productsAdminHandler
+    );
+
+    // POST products
+
+    productsResource.addMethod("POST", productsAdminIntegration);
+
+    // update /producst/{id}
+
+    productIdResource.addMethod("PUT", productsAdminIntegration);
+
+    // Delete ...
+    productIdResource.addMethod("DELETE", productsAdminIntegration);
   }
 }
