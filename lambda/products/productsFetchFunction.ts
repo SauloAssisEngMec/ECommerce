@@ -22,10 +22,17 @@ export async function handler(
       return {
         statusCode: 200,
         body: JSON.stringify({
-          message: "GET products working",
+          message: "GET /products ",
         }),
       };
     }
+  } else if (event.resource === "/products/{id}") {
+    const productId = event.pathParameters!.id as string;
+    console.log(`GET /products/${productId}`);
+    return {
+      statusCode: 200,
+      body: "GET /products/{id}",
+    };
   }
   return {
     statusCode: 400,

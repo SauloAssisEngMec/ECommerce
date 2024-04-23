@@ -13,7 +13,11 @@ The `cdk.json` file tells the CDK Toolkit how to execute your app.
 - `npx cdk diff` compare deployed stack with current state
 - `npx cdk synth` emits the synthesized CloudFormation template
 
-# ECommerce
+# Small ECommerce
+
+## Why use AWS'cloud development kit ? :
+
+The CDK allows you to define infrastructure as code using a programming language (such as TypeScript, Python, Java, etc.) and then synthesize and deploy that infrastructure on AWS. Here, we gonna use typescript.
 
 ## this application contains
 
