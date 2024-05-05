@@ -5,6 +5,7 @@ dotenv.config();
 import * as cdk from "aws-cdk-lib";
 import { ProductsAppStack } from "../lib/productsApp-stack";
 import { ECommerceApiStack } from "../lib/ecommerceAPI-stack";
+import { ProductsAppLayersStack } from "../lib/productsAppLayers-stack";
 
 const app = new cdk.App();
 
@@ -20,10 +21,21 @@ const tags = {
   team: "Saulo",
 };
 
+const productsAppLayersStack = new ProductsAppLayersStack(
+  app,
+  "ProductsAppLayers",
+  {
+    tags: tags,
+    env: env,
+  }
+);
+
 const productsAppStack = new ProductsAppStack(app, "ProductsApp", {
   tags: tags,
   env: env,
 });
+
+productsAppStack.addDependency(productsAppLayersStack); // depende indiretamente, não é uam dependencia forte
 
 const eCommerceApiStack = new ECommerceApiStack(app, "ECommerceApi", {
   productsFetchHandler: productsAppStack.productsFetchHandler,
